@@ -46,7 +46,7 @@ for j in range(len(passports)):
             continue
         if not(year>=2020 and year<=2030):
             continue
-        
+
         # checking pid
         print("pid")
         index = passports[j].find("pid:")+4
@@ -68,6 +68,22 @@ for j in range(len(passports)):
         if not(passports[j][index+3]==' ' or passports[j][index+3]=='\n'):
             continue
         if not(color in colors):
+            continue
+
+        # checking hcl
+        print("hcl")
+        index = passports[j].find("hcl:")+4
+        colour = passports[j][index:index+7]
+        if not(passports[j][index+7]==' ' or passports[j][index+7]=='\n'):
+            continue
+        letters = 0
+        numbers = 0
+        for char in colour:
+            if char.isdigit():
+                numbers+=1
+            if char >= 'a' and char<='f':
+                letters+=1
+        if letters!=3 or numbers!=3 or colour[0]!='#':
             continue
 
         # checking hgt
@@ -94,21 +110,6 @@ for j in range(len(passports)):
         else:
             continue
 
-        # checking hcl
-        print("hcl")
-        index = passports[j].find("hcl:")+4
-        colour = passports[j][index:index+6]
-        if not(passports[j][index+6]==' ' or passports[j][index+6]=='\n'):
-            continue
-        letters = 0
-        numbers = 0
-        for char in colour:
-            if char.isdigit():
-                numbers+=1
-            if char >= 'a' and char<='f':
-                letters+=1
-        if letters!=3 or numbers!=3:
-            continue
 
         valid+=1
 

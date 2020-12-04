@@ -1,25 +1,18 @@
 # file I'm using to test my string checking
 
-passports = "hgt:150cm            "
+passports = "hcl:150abc            "
 # checking eyr
-index = passports.find("hgt:")+4
-num = ""
-height_line=""
-for char in passports[index:]:
-    if(char!=" " and char!='\n'):
-        height_line+=char
-
-if(len(height_line)>5 or len(height_line)<4):
+# checking hcl
+index = passports.find("hcl:")+4
+colour = passports[index:index+7]
+if not(passports[index+7]==' ' or passports[index+7]=='\n'):
     print('i1')
-for char in height_line:
+letters = 0
+numbers = 0
+for char in colour:
     if char.isdigit():
-        num+=char
-num = int(num)
-if "cm" in height_line:
-    if num>193 or num<150:
-        print('icm')
-elif "in" in height_line:
-    if num>76 or num<59:
-        print('iin')
-else:
-    print("i3")
+        numbers+=1
+    if char >= 'a' and char<='f':
+        letters+=1
+if letters!=3 or numbers!=3 or colour[0]!='#':
+    print('i2')
