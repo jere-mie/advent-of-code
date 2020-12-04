@@ -1,3 +1,4 @@
+import re
 lines = []
 with open('input.txt', 'r') as f:
     lines = f.readlines()
@@ -13,105 +14,70 @@ for i in lines:
     else:
         passport+=str(i)
 passports.append(passport)
-for j in range(len(passports)):
-    if passports[j].find("byr")!=-1 \
-    and passports[j].find("iyr")!=-1 \
-    and passports[j].find("eyr")!=-1 \
-    and passports[j].find("hgt")!=-1 \
-    and passports[j].find("hcl")!=-1 \
-    and passports[j].find("ecl")!=-1 \
-    and passports[j].find("pid")!=-1:
-        # checking byr
-        print("byr")
-        index = passports[j].find("byr:")+4
-        year = int(passports[j][index:index+4])
-        if not(passports[j][index+4]==' ' or passports[j][index+4]=='\n'):
-            continue
-        if not(year>=1920 and year<=2002):
-            continue
-        # checking iyr
-        print("iyr")
-        index = passports[j].find("iyr:")+4
-        year = int(passports[j][index:index+4])
-        if not(passports[j][index+4]==' ' or passports[j][index+4]=='\n'):
-            continue
-        if not(year>=2010 and year<=2020):
-            continue
-        
-        # checking eyr
-        print("eyr")
-        index = passports[j].find("eyr:")+4
-        year = int(passports[j][index:index+4])
-        if not(passports[j][index+4]==' ' or passports[j][index+4]=='\n'):
-            continue
-        if not(year>=2020 and year<=2030):
+for s in passports:
+    print('byr')
+    # matching byr
+    match = re.search(r"(?<=byr:)\d{4}\b", s)
+    if match==None:
+        continue
+    else:
+        num = int(match.group())
+        if not(num>=1920 and num<=2002):
             continue
 
-        # checking pid
-        print("pid")
-        index = passports[j].find("pid:")+4
-        num = passports[j][index:index+9]
-        if not(passports[j][index+9]==' ' or passports[j][index+9]=='\n'):
-            continue
-        numbers=0
-        for char in num:
-            if char.isdigit():
-                numbers+=1
-        if not(numbers==9):
+    print('iyr')
+    # matching iyr
+    match = re.search(r"(?<=iyr:)\d{4}\b", s)
+    if match==None:
+        continue
+    else:
+        num = int(match.group())
+        if not(num>=2010 and num<=2020):
             continue
 
-        # testing ecl
-        print("ecl")
-        index = passports[j].find("ecl:")+4
-        color = passports[j][index:index+3]
-        colors = ["amb","blu","brn","gry","hzl","oth"]
-        if not(passports[j][index+3]==' ' or passports[j][index+3]=='\n'):
-            continue
-        if not(color in colors):
-            continue
-
-        # checking hcl
-        print("hcl")
-        index = passports[j].find("hcl:")+4
-        colour = passports[j][index:index+7]
-        if not(passports[j][index+7]==' ' or passports[j][index+7]=='\n'):
-            continue
-        letters = 0
-        numbers = 0
-        for char in colour:
-            if char.isdigit():
-                numbers+=1
-            if char >= 'a' and char<='f':
-                letters+=1
-        if letters!=3 or numbers!=3 or colour[0]!='#':
+    print('eyr')
+    # matching eyr
+    match = re.search(r"(?<=eyr:)\d{4}\b", s)
+    if match==None:
+        continue
+    else:
+        num = int(match.group())
+        if not(num>=2020 and num<=2030):
             continue
 
-        # checking hgt
-        print("hgt")
-        index = passports[j].find("hgt:")+4
-        num = ""
-        height_line=""
-        for char in passports[j][index:]:
-            if(char!=" " and char!='\n'):
-                height_line+=char
+    # matching pid
+    print('pid')
+    match = re.search(r"(?<=pid:)[0-9]{9}\b", s)
+    if match==None:
+        continue
 
-        if(len(height_line)>5 or len(height_line)<4):
-            continue
-        for char in height_line:
-            if char.isdigit():
-                num+=char
-        num = int(num)
-        if "cm" in height_line:
-            if num>193 or num<150:
+    # matching ecl
+    print('ecl')
+    match = re.search(r"(?<=ecl:)(amb|blu|brn|gry|grn|hzl|oth)\b", s)
+    if match==None:
+        continue
+
+    # matching hcl
+    print('hcl')
+    match = re.search(r"(?<=hcl:#)[0-9a-f]{6}\b", s)
+    if match==None:
+        continue
+
+    # matching hgt
+    print('hgt')
+    match = re.search(r"(?<=hgt:)[0-9]+(in|cm)\b", s)
+    if match==None:
+        continue
+    else:
+        temp = match.group()
+        num = int(temp[:-2])
+        if "in" in temp:
+            if num<59 or num>76:
                 continue
-        elif "in" in height_line:
-            if num>76 or num<59:
+        elif "cm" in temp:
+            if num<150 or num>193:
                 continue
-        else:
-            continue
 
-
-        valid+=1
+    valid+=1
 
 print(valid)
-print(len(passports))
