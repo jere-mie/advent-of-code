@@ -44,6 +44,7 @@ for j in range(len(passports)):
             continue
         if !(year>=2020 and year<=2030):
             continue
+
         
 
 print(valid)
