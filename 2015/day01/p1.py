@@ -1,0 +1,1 @@
+print(sum(map(lambda x: -1 if x==')' else 1, open('input.txt', 'r').read().strip())))
